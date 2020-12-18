@@ -5,7 +5,7 @@ let sut;
 let baseInput;
 let score;
 
-describe('IncomeProfile', () => {
+describe('IncomeProfiler', () => {
   beforeEach(() => {
     sut = new IncomeProfiler();
     baseInput = {

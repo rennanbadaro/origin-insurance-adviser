@@ -2,7 +2,7 @@ const { isNil, isNull } = require('lodash');
 
 const Score = require('../Score');
 
-class IncomeProfile {
+class IncomeProfiler {
   constructor() {
     this.topLevelIncome = 200000;
     this.deductionForTopLevelIncome = 1;
@@ -44,4 +44,4 @@ class IncomeProfile {
   }
 }
 
-module.exports = IncomeProfile;
+module.exports = IncomeProfiler;
