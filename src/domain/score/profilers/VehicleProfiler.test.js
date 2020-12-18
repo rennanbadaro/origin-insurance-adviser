@@ -1,14 +1,13 @@
 const Score = require('../Score');
-const HouseProfiler = require('./HouseProfiler');
-const HouseOwnershipEnum = require('../../../shared/enums/HouseOwnershipStatus.enum');
+const VehicleProfiler = require('./VehicleProfiler');
 
-let sut;
+let profiler;
 let baseInput;
 let baseScore;
 
-describe('IncomeProfile', () => {
+describe('VehicleProfiler', () => {
   beforeEach(() => {
-    sut = new HouseProfiler();
+    profiler = new VehicleProfiler();
     baseInput = {
       age: 35,
       dependents: 2,
@@ -27,8 +26,8 @@ describe('IncomeProfile', () => {
   });
 
   describe('.run', () => {
-    it('Should set null for disability, auto and home insurance if user has no house', () => {
-      const result = sut.run(baseInput, baseScore);
+    it('Should set null for disability, auto and home insurance when user has no vehicle', () => {
+      const result = profiler.run(baseInput, baseScore);
 
       const expectedResult = new Score({
         ...baseScore,
@@ -40,28 +39,27 @@ describe('IncomeProfile', () => {
       expect(result).toStrictEqual(expectedResult);
     });
 
-    it('Should not modify the result if the house is owned', () => {
+    it('Should not modify the result if the vehicle has more than 5 year of its manufacture', () => {
       const input = {
         ...baseInput,
-        house: { ownership_status: HouseOwnershipEnum.owned },
+        vehicle: { year: new Date().getFullYear() - 6 },
       };
-      const result = sut.run(input, baseScore);
+      const result = profiler.run(input, baseScore);
 
       expect(result).toStrictEqual(baseScore);
     });
 
-    it('Should increase one to house and disability lines if house is mortgaged', () => {
+    it('Should add 1 to auto score if the vehicle was manufactured in the last 5 years', () => {
       const input = {
         ...baseInput,
-        house: { ownership_status: HouseOwnershipEnum.mortgaged },
+        vehicle: { year: new Date().getFullYear() - 1 },
       };
+      const result = profiler.run(input, baseScore);
 
       const expectedResult = new Score({
         ...baseScore,
-        disability: baseScore.disability + 1,
-        home: baseScore.home + 1,
+        auto: baseScore.auto + 1,
       });
-      const result = sut.run(input, baseScore);
 
       expect(result).toStrictEqual(expectedResult);
     });

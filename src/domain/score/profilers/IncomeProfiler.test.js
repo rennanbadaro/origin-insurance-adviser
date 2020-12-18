@@ -15,7 +15,7 @@ describe('IncomeProfiler', () => {
       income: 100000,
       marital_status: 'single',
       risk_questions: [0, 1, 0],
-      vehicle: 0,
+      vehicle: null,
     };
     score = new Score({
       auto: 3,
@@ -59,9 +59,7 @@ describe('IncomeProfiler', () => {
     it('Should not affect the score result if income is lower than 200k', () => {
       const result = sut.run(baseInput, score);
 
-      const expectedResult = new Score(score)
-
-      expect(result).toStrictEqual(expectedResult);
+      expect(result).toStrictEqual(score);
     });
 
     it('Should not affect the score result if income is equal to 200k', () => {
@@ -69,9 +67,7 @@ describe('IncomeProfiler', () => {
 
       const result = sut.run(input, score);
 
-      const expectedResult = new Score(score)
-
-      expect(result).toStrictEqual(expectedResult);
+      expect(result).toStrictEqual(score);
     });
 
     it('Should deduct 1 from all lines of insurance if income is bigger than 200k', () => {

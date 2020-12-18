@@ -14,7 +14,7 @@ describe('RiskQuizProfiler', () => {
       income: 100000,
       marital_status: 'single',
       risk_questions: [1, 0, 1],
-      vehicle: 0,
+      vehicle: null,
     };
   });
 
