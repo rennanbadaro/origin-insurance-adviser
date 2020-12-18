@@ -1,6 +1,6 @@
-const Score = require('../Score');
-const MaritalStatusProfiler = require('./MaritalStatusProfiler');
-const MaritalStatusEnum = require('../../../shared/enums/MaritalStatus');
+const Score = require('../../../../src/domain/score/Score');
+const MaritalStatusProfiler = require('../../../../src/domain/score/profilers/MaritalStatusProfiler');
+const MaritalStatusEnum = require('../../../../src/shared/enums/MaritalStatus');
 
 let profiler;
 let baseInput;

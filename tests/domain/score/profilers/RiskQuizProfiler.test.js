@@ -1,5 +1,5 @@
-const Score = require('../Score');
-const RiskQuizProfiler = require('./RiskQuizProfiler');
+const Score = require('../../../../src/domain/score/Score');
+const RiskQuizProfiler = require('../../../../src/domain/score/profilers/RiskQuizProfiler');
 
 let sut;
 let baseInput;

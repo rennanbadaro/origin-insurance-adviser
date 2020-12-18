@@ -1,6 +1,6 @@
-const Score = require('../Score');
-const HouseProfiler = require('./HouseProfiler');
-const HouseOwnershipEnum = require('../../../shared/enums/HouseOwnershipStatus');
+const Score = require('../../../../src/domain/score/Score');
+const HouseProfiler = require('../../../../src/domain/score/profilers/HouseProfiler');
+const HouseOwnershipEnum = require('../../../../src/shared/enums/HouseOwnershipStatus');
 
 let sut;
 let baseInput;

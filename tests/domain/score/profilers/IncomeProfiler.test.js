@@ -1,5 +1,5 @@
-const Score = require('../Score');
-const IncomeProfiler = require('./IncomeProfiler');
+const Score = require('../../../../src/domain/score/Score');
+const IncomeProfiler = require('../../../../src/domain/score/profilers/IncomeProfiler');
 
 let sut;
 let baseInput;
