@@ -1,6 +1,6 @@
 const { isNil, isNull } = require('lodash');
 
-const HouseOwnershipStatusEnum = require('../../../shared/enums/HouseOwnershipStatus.enum');
+const HouseOwnershipStatusEnum = require('../../../shared/enums/HouseOwnershipStatus');
 const Score = require('../Score');
 
 class HouseProfiler {
@@ -20,7 +20,7 @@ class HouseProfiler {
 
     const ownershipStatus = adviceInput.house.ownership_status;
 
-    if (ownershipStatus === HouseOwnershipStatusEnum.mortgaged) {
+    if (ownershipStatus === HouseOwnershipStatusEnum.MORTGAGED) {
       profilerResult.disability = !isNull(profilerResult.disability)
         && profilerResult.disability + 1;
 

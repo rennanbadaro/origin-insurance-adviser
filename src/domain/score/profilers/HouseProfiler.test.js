@@ -1,12 +1,12 @@
 const Score = require('../Score');
 const HouseProfiler = require('./HouseProfiler');
-const HouseOwnershipEnum = require('../../../shared/enums/HouseOwnershipStatus.enum');
+const HouseOwnershipEnum = require('../../../shared/enums/HouseOwnershipStatus');
 
 let sut;
 let baseInput;
 let baseScore;
 
-describe('IncomeProfile', () => {
+describe('HouseProfile', () => {
   beforeEach(() => {
     sut = new HouseProfiler();
     baseInput = {
@@ -43,7 +43,7 @@ describe('IncomeProfile', () => {
     it('Should not modify the result if the house is owned', () => {
       const input = {
         ...baseInput,
-        house: { ownership_status: HouseOwnershipEnum.owned },
+        house: { ownership_status: HouseOwnershipEnum.OWNED },
       };
       const result = sut.run(input, baseScore);
 
@@ -53,7 +53,7 @@ describe('IncomeProfile', () => {
     it('Should increase one to house and disability lines if house is mortgaged', () => {
       const input = {
         ...baseInput,
-        house: { ownership_status: HouseOwnershipEnum.mortgaged },
+        house: { ownership_status: HouseOwnershipEnum.MORTGAGED },
       };
 
       const expectedResult = new Score({
