@@ -3,7 +3,7 @@ const MaritalStatusEnum = require('../../../shared/enums/MaritalStatus');
 
 const Score = require('../Score');
 
-class DependentProfiler {
+class MaritalStatusProfiler {
   run(adviceInput = {}, score = {}) {
     const profilerResult = new Score({ ...score });
 
@@ -21,4 +21,4 @@ class DependentProfiler {
   }
 }
 
-module.exports = DependentProfiler;
+module.exports = MaritalStatusProfiler;
