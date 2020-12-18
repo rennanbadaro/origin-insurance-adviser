@@ -2,33 +2,43 @@ const { isNil, isNull } = require('lodash');
 
 const HouseOwnershipStatusEnum = require('../../../shared/enums/HouseOwnershipStatus');
 const Score = require('../Score');
+const BaseProfiler = require('./BaseProfiler');
 
-class HouseProfiler {
-  run(adviceInput = {}, score = {}) {
+class HouseProfiler extends BaseProfiler {
+  constructor(nextProfiler = null) {
+    super(nextProfiler)
+  }
+
+  run(adviceInput, score) {
     const hasHouse =
       !isNil(adviceInput.house) && !isNil(adviceInput.house.ownership_status);
 
-    const profilerResult = new Score({ ...score });
+    let profilerResult = new Score({ ...score });
 
     if (!hasHouse) {
-      profilerResult.auto = null;
-      profilerResult.disability = null;
-      profilerResult.home = null;
+      profilerResult = new Score({
+        ...profilerResult,
+        auto: null,
+        disability: null,
+        home: null,
+      })
 
-      return profilerResult;
+      return this.handleNext(adviceInput, profilerResult);
     }
 
     const ownershipStatus = adviceInput.house.ownership_status;
 
     if (ownershipStatus === HouseOwnershipStatusEnum.MORTGAGED) {
-      profilerResult.disability = !isNull(profilerResult.disability)
-        && profilerResult.disability + 1;
+      profilerResult = new Score({
+        ...profilerResult,
+        disability: isNull(profilerResult.disability) ? null : profilerResult.disability + 1,
+        home: isNull(profilerResult.home) ? null : profilerResult.home + 1,
+      });
 
-        profilerResult.home = !isNull(profilerResult.home)
-        && profilerResult.home + 1;
+      return this.handleNext(adviceInput, profilerResult);
     }
 
-    return profilerResult;
+    return this.handleNext(adviceInput, profilerResult);
   }
 }
 
