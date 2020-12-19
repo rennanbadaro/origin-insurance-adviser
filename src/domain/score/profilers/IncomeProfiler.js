@@ -24,7 +24,7 @@ class IncomeProfiler extends BaseProfiler {
       return this.handleNext(adviceInput, profilerResult);
     }
 
-    const shouldDeduct = adviceInput.income > this.topLevelIncome;
+    const shouldDeduct = adviceInput.income > 200000;
 
     if (shouldDeduct) {
       profilerResult = new Score({

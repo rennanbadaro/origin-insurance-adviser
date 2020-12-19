@@ -21,7 +21,7 @@ class AgeProfiler extends BaseProfiler {
         life: null,
       });
 
-      return this.handleNext(profilerResult, score);
+      return this.handleNext(adviceInput, profilerResult);
     }
 
     const isUnder30 = age < 30;
@@ -34,7 +34,7 @@ class AgeProfiler extends BaseProfiler {
         life: isNull(profilerResult.life) ? null : profilerResult.life - 2,
       });
 
-      return this.handleNext(profilerResult, score);
+      return this.handleNext(adviceInput, profilerResult);
     }
 
     const isBetween30And40 = age >= 30 && age <= 40
@@ -47,10 +47,10 @@ class AgeProfiler extends BaseProfiler {
         life: isNull(profilerResult.life) ? null : profilerResult.life - 1,
       });
 
-      return this.handleNext(profilerResult, score);
+      return this.handleNext(adviceInput, profilerResult);
     }
 
-    return this.handleNext(profilerResult, score);
+    return this.handleNext(adviceInput, profilerResult);
   }
 }
 

@@ -1,5 +1,5 @@
-const Score = require('../../../../src/domain/score/Score');
-const VehicleProfiler = require('../../../../src/domain/score/profilers/VehicleProfiler');
+const Score = require('src/domain/score/Score');
+const VehicleProfiler = require('src/domain/score/profilers/VehicleProfiler');
 
 let profiler;
 let baseInput;
