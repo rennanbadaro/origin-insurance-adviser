@@ -1,39 +1,127 @@
-# Origin Insurance Adviser
+# Development Process Notes
 
-Simple API that helps users get insurance advice without having to get their hands dirty.
-Just provide some basic information about assets and income and let it do its magic
+<!-- ## Tooling
+To have a bit more realistic feeling for both parties in this process (reviewers and reviewee), the stack chosen was Python with Flask.
 
-## Requirements
+<br> -->
 
-- [NodeJS - 12.x](https://nodejs.org/) *
-- [Docker](https://docs.docker.com/get-docker/)
-- [Docker Compose](https://docs.docker.com/compose/install/)
+## Architecture and Design Decisions
+A Clean architecture based was used in this project to achieve a very decoupled application. A short overview of the project's dir structure:
 
-_* If you're using [nvm](https://github.com/nvm-sh/nvm), the project contains a `.nvmrc` file. In order to have the specified NodeJS version installed just run on your command line `nvm install` ._
+- `app`: keeps the code that makes this an actual API accessible via HTTP requests. Here are stored controllers, routers and everything needed to expose the API and deal with requests which will be delegated to the domain. Future aditions of other communication sources such as gRPC or event handling could also be dealt here as well.
 
-## Running the project
+- `domain`: where the good stuff goes :) This layer contains all the business rules required for this assignment. There you'll find the elements developed to calculate user's insurance advice and its use case `generate_insurance_advice`.
 
-To start the project on your local environment open up the terminal and do the following commands:
+- `shared`: general code to be shared by any layer, including enums, errors, etc.
 
-```sh
-npm i
-npm run start:dev
+_No `infrastructure` layer was added because no external communication was needed for now (e.g. database interaction, messaging, external API calls, etc), so for the sake of simplicity it was not included. Although it can be argued that a logger abstraction could be provided by this layer._
+
+<br>
+
+## Development Process
+This was a first API implementation using Python, so to make the learning curve a little less steep the whole development started from the domain using TDD. This way the focus could be kept in the business logic itself and the core language features instead of having an overhead trying to understand Flask and how to deal with application details.
+
+After reviewing the specification it came up that the desired output could be achieved by building a series of `profilers`, each of them with a certain specialty (house, vehicle, income, etc). These profilers would work with a known input and based on a provided agreggated result calculate the risk for the given insurance lines according to its evaluation.
+
+Working with enforced contracts of inputs and outputs, this approach opens the possibility to build N profilers and chain them together to achieve the end risk result as needed. A [Chain of Responsibility](https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern) seemed very appropriate.
+
+Finally, with the chain's result a final component translates these scores into an actual insurance advice.
+
+
+## Assumptions
+
+### House Profiler
+- Since according to the specification, all input fields are required, although not explicitly said it is assumed that if the user has no house the payload should be `"house": null`
+
+### Vehicle Profiler
+- Same as with the `House Profiler`, no vehicle is assumed to be received as `"vehicle": null`
+
+----
+# Origin Backend Take-Home Assignment
+Origin offers its users an insurance package personalized to their specific needs without requiring the user to understand anything about insurance. This allows Origin to act as their *de facto* insurance advisor.
+
+Origin determines the user’s insurance needs by asking personal & risk-related questions and gathering information about the user’s vehicle and house. Using this data, Origin determines their risk profile for **each** line of insurance and then suggests an insurance plan (`"economic"`, `"regular"`, `"responsible"`) corresponding to her risk profile.
+
+For this assignment, you will create a simple version of that application by coding a simple API endpoint that receives a JSON payload with the user information and returns her risk profile (JSON again) – you don’t have to worry about the frontend of the application.
+
+## The input
+First, the would-be frontend of this application asks the user for her **personal information**. Then, it lets her add her **house** and **vehicle**. Finally, it asks her to answer 3 binary **risk questions**. The result produces a JSON payload, posted to the application’s API endpoint, like this example:
+
+```JSON
+{
+  "age": 35,
+  "dependents": 2,
+  "house": {"ownership_status": "owned"},
+  "income": 0,
+  "marital_status": "married",
+  "risk_questions": [0, 1, 0],
+  "vehicle": {"year": 2018}
+}
 ```
 
-## Tests
+### User attributes
+All user attributes are required:
 
-The project contains units (and functional) tests that covers all the business logic. To run the full test suite type the following command:
+- Age (an integer equal or greater than 0).
+- The number of dependents (an integer equal or greater than 0).
+- Income (an integer equal or greater than 0).
+- Marital status (`"single"` or `"married"`).
+- Risk answers (an array with 3 booleans).
 
-```sh
-npm run test:all
+### House
+Users can have 0 or 1 house. When they do, it has just one attribute: `ownership_status`, which can be `"owned"` or `"mortgaged"`.
+
+### Vehicle
+Users can have 0 or 1 vehicle. When they do, it has just one attribute: a positive integer corresponding to the `year` it was manufactured.
+
+## The risk algorithm
+The application receives the JSON payload through the API endpoint and transforms it into a *risk profile* by calculating a *risk score* for each line of insurance (life, disability, home & auto) based on the information provided by the user.
+
+First, it calculates the *base score* by summing the answers from the risk questions, resulting in a number ranging from 0 to 3. Then, it applies the following rules to determine a *risk score* for each line of insurance.
+
+1. If the user doesn’t have income, vehicles or houses, she is ineligible for disability, auto, and home insurance, respectively.
+2. If the user is over 60 years old, she is ineligible for disability and life insurance.
+3. If the user is under 30 years old, deduct 2 risk points from all lines of insurance. If she is between 30 and 40 years old, deduct 1.
+4. If her income is above $200k, deduct 1 risk point from all lines of insurance.
+5. If the user's house is mortgaged, add 1 risk point to her home score and add 1 risk point to her disability score.
+6. If the user has dependents, add 1 risk point to both the disability and life scores.
+7. If the user is married, add 1 risk point to the life score and remove 1 risk point from disability.
+8. If the user's vehicle was produced in the last 5 years, add 1 risk point to that vehicle’s score.
+
+This algorithm results in a final score for each line of insurance, which should be processed using the following ranges:
+
+- **0 and below** maps to **“economic”**.
+- **1 and 2** maps to **“regular”**.
+- **3 and above** maps to **“responsible”**.
+
+
+## The output
+Considering the data provided above, the application should return the following JSON payload:
+
+```JSON
+{
+    "auto": "regular",
+    "disability": "ineligible",
+    "home": "economic",
+    "life": "regular"
+}
 ```
 
-To run only unit tests:
+## Criteria
+You may use any language and framework provided that you build a solid system with an emphasis on code quality, simplicity, readability, maintainability, and reliability, particularly regarding architecture and testing. We'd prefer it if you used Python, but it's just that – a preference.
 
-```
-npm run test:unit
-```
+Be aware that Origin will mainly take into consideration the following evaluation criteria:
+* How clean and organized your code is;
+* If you implemented the business rules correctly;
+* How good your automated tests are (qualitative over quantitative).
 
-## Development Notes
+Other important notes:
+* Develop a extensible recommendation engine
+* Add to the README file: (1) instructions to run the code; (2) what were the main technical decisions you made; (3) relevant comments about your project
+* You must use English in your code and also in your docs
 
-Some brief comments about the development process can be found [here](./notes.md)
+This assignment should be doable in less than one day. We expect you to learn fast, **communicate with us**, and make decisions regarding its implementation & scope to achieve the expected results on time.
+
+It is not necessary to build the screens a user would interact with, however, as the API is intended to power a user-facing application, we expect the implementation to be as close as possible to what would be necessary in real-life. Consider another developer would get your project/repository to evolve and implement new features from exactly where you stopped.
+
+
