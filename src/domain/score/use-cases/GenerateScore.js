@@ -1,5 +1,3 @@
-const ProfilerChainFactory = require('../factories/ProfilerChainFactory');
-
 class GenerateScore {
   constructor(params) {
     this.ProfilerChainFactory = params.ProfilerChainFactory;
