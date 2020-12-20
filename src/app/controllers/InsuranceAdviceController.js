@@ -12,7 +12,7 @@ class InsuranceAdviceController {
 
     const adviceInput = new InsuranceAdviceInput(body);
 
-    const insuranceAdvice = this.generateInsuranceAdviceUseCase(adviceInput);
+    const insuranceAdvice = this.generateInsuranceAdviceUseCase.run(adviceInput);
 
     ctx.response.status = StatusCodes.OK;
     ctx.response.body = insuranceAdvice;
