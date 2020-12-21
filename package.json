@@ -4,8 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node_modules/.bin/nodemon --nolazy --inspect=0.0.0.0:9222 src/index.js",
-    "start:dev": "node_modules/.bin/nodemon --nolazy --inspect=0.0.0.0:9222 src/index.js",
+    "start": "node -r dotenv/config src/index.js",
+    "start:dev": "node_modules/.bin/nodemon -r dotenv/config src/index.js",
+    "start:docker": "node_modules/.bin/nodemon -r dotenv/config --nolazy --inspect=0.0.0.0:9222 src/index.js",
+    "docker:up": "docker-compose up",
+    "docker:down": "docker-compose down",
     "test:unit": "NODE_PATH=. jest tests/unit"
   },
   "keywords": [],
@@ -13,6 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "@koa/router": "^10.0.0",
+    "dotenv": "^8.2.0",
     "http-status-codes": "^2.1.4",
     "joi": "^17.3.0",
     "koa": "^2.13.0",
