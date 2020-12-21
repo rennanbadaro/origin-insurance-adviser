@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node_modules/.bin/nodemon --nolazy --inspect=0.0.0.0:9222 src/index.js",
+    "start:dev": "node_modules/.bin/nodemon --nolazy --inspect=0.0.0.0:9222 src/index.js",
     "test:unit": "NODE_PATH=. jest tests/unit"
   },
   "keywords": [],
@@ -19,6 +21,7 @@
   },
   "devDependencies": {
     "@types/jest": "^26.0.19",
-    "jest": "^26.6.3"
+    "jest": "^26.6.3",
+    "nodemon": "^2.0.6"
   }
 }

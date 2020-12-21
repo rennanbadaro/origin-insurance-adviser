@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  app:
+    image: node:12.16.1-alpine3.11
+    container_name: insurance-adviser
+    restart: always
+    env_file: .env
+    ports:
+      - '${PORT}:${PORT}'
+    working_dir: /app
+    entrypoint: ['npm', 'run', 'start:dev']
+    volumes:
+      - .:/app
+    networks:
+      - insurance-adviser-network
+
+networks:
+  insurance-adviser-network:
+    driver: bridge
