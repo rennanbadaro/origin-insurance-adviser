@@ -56,6 +56,19 @@ describe('AgeProfiler', () => {
       expect(result).toStrictEqual(expectedResult);
     });
 
+    it('Should not affect score even is under 30 years old if insurance lines are already null ', () => {
+      const input = {
+        ...baseInput,
+        age: 29,
+      };
+
+      const score = new Score();
+
+      const result = profiler.run(input, score);
+
+      expect(result).toStrictEqual(score);
+    });
+
     it('Should deduct 1 point from all insurance life if user is between 30 and 40 years old', () => {
       const input = {
         ...baseInput,
@@ -72,6 +85,19 @@ describe('AgeProfiler', () => {
       });
 
       expect(result).toStrictEqual(expectedResult);
+    });
+
+    it('Should not affect score event if user is between 30 and 40 years old if insurance lines are already null', () => {
+      const input = {
+        ...baseInput,
+        age: 35,
+      };
+
+      const score = new Score();
+
+      const result = profiler.run(input, score);
+
+      expect(result).toStrictEqual(score);
     });
 
     it('Should not affect score if user is more than 40 and less than 60 old', () => {

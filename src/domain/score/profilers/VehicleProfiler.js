@@ -30,7 +30,7 @@ class VehicleProfiler extends BaseProfiler {
 
     profilerResult = new Score({
       ...profilerResult,
-      auto: isNull(profilerResult.auto) ? profilerResult.auto : profilerResult.auto + 1,
+      auto: isNull(profilerResult.auto) ? null : profilerResult.auto + 1,
     });
 
     return this.handleNext(adviceInput, profilerResult);

@@ -48,5 +48,22 @@ describe('DependentProfiler', () => {
 
       expect(result).toStrictEqual(expectedResult);
     });
+
+    it('Should not affect score even if user has dependents if disability and life insurance lines are already null', () => {
+      const input = {
+        ...baseInput,
+        dependents: 99,
+      };
+
+      const score = new Score({
+        ...baseScore,
+        disability: null,
+        life: null,
+      });
+
+      const result = profiler.run(input, score);
+
+      expect(result).toStrictEqual(score);
+    });
   });
 });

@@ -2,13 +2,13 @@ const Score = require('src/domain/score/Score');
 const HouseProfiler = require('src/domain/score/profilers/HouseProfiler');
 const HouseOwnershipEnum = require('src/shared/enums/HouseOwnershipStatus');
 
-let sut;
+let profiler;
 let baseInput;
 let baseScore;
 
 describe('HouseProfile', () => {
   beforeEach(() => {
-    sut = new HouseProfiler();
+    profiler = new HouseProfiler();
     baseInput = {
       age: 35,
       dependents: 2,
@@ -28,7 +28,7 @@ describe('HouseProfile', () => {
 
   describe('.run', () => {
     it('Should set null for disability, auto and home insurance if user has no house', () => {
-      const result = sut.run(baseInput, baseScore);
+      const result = profiler.run(baseInput, baseScore);
 
       const expectedResult = new Score({
         ...baseScore,
@@ -40,12 +40,12 @@ describe('HouseProfile', () => {
       expect(result).toStrictEqual(expectedResult);
     });
 
-    it('Should not modify the result if the house is owned', () => {
+    it('Should not affect score if the house is owned', () => {
       const input = {
         ...baseInput,
         house: { ownership_status: HouseOwnershipEnum.OWNED },
       };
-      const result = sut.run(input, baseScore);
+      const result = profiler.run(input, baseScore);
 
       expect(result).toStrictEqual(baseScore);
     });
@@ -61,9 +61,26 @@ describe('HouseProfile', () => {
         disability: baseScore.disability + 1,
         home: baseScore.home + 1,
       });
-      const result = sut.run(input, baseScore);
+      const result = profiler.run(input, baseScore);
 
       expect(result).toStrictEqual(expectedResult);
+    });
+
+    it('Should not affect score event if the house is mortgaged if disability and home insurance lines are already null', () => {
+      const input = {
+        ...baseInput,
+        house: { ownership_status: HouseOwnershipEnum.MORTGAGED },
+      };
+
+      const score = new Score({
+        ...baseScore,
+        disability: null,
+        home: null,
+      });
+
+      const result = profiler.run(input, score);
+
+      expect(result).toStrictEqual(score);
     });
   });
 });

@@ -1,12 +1,12 @@
 const Score = require('src/domain/score/Score');
 const RiskQuizProfiler = require('src/domain/score/profilers/RiskQuizProfiler');
 
-let sut;
+let profiler;
 let baseInput;
 
 describe('RiskQuizProfiler', () => {
   beforeEach(() => {
-    sut = new RiskQuizProfiler();
+    profiler = new RiskQuizProfiler();
     baseInput = {
       age: 35,
       dependents: 2,
@@ -20,7 +20,7 @@ describe('RiskQuizProfiler', () => {
 
   describe('.run', () => {
     it('Should sum up risk questions input and set it to all lines os insurance', () => {
-      const result = sut.run(baseInput);
+      const result = profiler.run(baseInput);
 
       const expectedResult = new Score({
         auto: 2,

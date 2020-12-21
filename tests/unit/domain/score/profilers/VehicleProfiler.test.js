@@ -39,7 +39,7 @@ describe('VehicleProfiler', () => {
       expect(result).toStrictEqual(expectedResult);
     });
 
-    it('Should not modify the result if the vehicle has more than 5 year of its manufacture', () => {
+    it('Should not affect score if the vehicle has more than 5 year of its manufacture', () => {
       const input = {
         ...baseInput,
         vehicle: { year: new Date().getFullYear() - 6 },
@@ -62,6 +62,22 @@ describe('VehicleProfiler', () => {
       });
 
       expect(result).toStrictEqual(expectedResult);
+    });
+
+    it('Should not affect score even if the vehicle was manufactured in the last 5 years if auto insurance line is already null', () => {
+      const input = {
+        ...baseInput,
+        vehicle: { year: new Date().getFullYear() - 1 },
+      };
+
+      const score = new Score({
+        ...baseScore,
+        auto: null,
+      });
+
+      const result = profiler.run(input, score);
+
+      expect(result).toStrictEqual(score);
     });
   });
 });

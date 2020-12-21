@@ -1,13 +1,13 @@
 const Score = require('src/domain/score/Score');
 const IncomeProfiler = require('src/domain/score/profilers/IncomeProfiler');
 
-let sut;
+let profiler;
 let baseInput;
 let score;
 
 describe('IncomeProfiler', () => {
   beforeEach(() => {
-    sut = new IncomeProfiler();
+    profiler = new IncomeProfiler();
     baseInput = {
       age: 35,
       dependents: 2,
@@ -28,7 +28,7 @@ describe('IncomeProfiler', () => {
   describe('.run', () => {
     it('Should set null for disability, auto and home insurance if income is zero', () => {
       const input = { baseInput, income: 0 }
-      const result = sut.run(input, score);
+      const result = profiler.run(input, score);
 
       const expectedResult = new Score({
         ...score,
@@ -44,7 +44,7 @@ describe('IncomeProfiler', () => {
       const input = { ...baseInput };
       delete input.income;
 
-      const result = sut.run(input, score);
+      const result = profiler.run(input, score);
 
       const expectedResult = new Score({
         ...score,
@@ -57,7 +57,7 @@ describe('IncomeProfiler', () => {
     });
 
     it('Should not affect the score result if income is lower than 200k', () => {
-      const result = sut.run(baseInput, score);
+      const result = profiler.run(baseInput, score);
 
       expect(result).toStrictEqual(score);
     });
@@ -65,7 +65,7 @@ describe('IncomeProfiler', () => {
     it('Should not affect the score result if income is equal to 200k', () => {
       const input = { ...baseInput, income: 200000 };
 
-      const result = sut.run(input, score);
+      const result = profiler.run(input, score);
 
       expect(result).toStrictEqual(score);
     });
@@ -73,7 +73,7 @@ describe('IncomeProfiler', () => {
     it('Should deduct 1 from all lines of insurance if income is bigger than 200k', () => {
       const input = { ...baseInput, income: 200001 };
 
-      const result = sut.run(input, score);
+      const result = profiler.run(input, score);
 
       const expectedResult = new Score({
         auto: score.auto - 1,
@@ -94,7 +94,7 @@ describe('IncomeProfiler', () => {
         life: null,
       })
 
-      const result = sut.run(input, score);
+      const result = profiler.run(input, score);
 
       expect(result).toStrictEqual(score);
     });
