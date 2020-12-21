@@ -8,8 +8,9 @@ services:
     env_file: .env
     ports:
       - '${PORT}:${PORT}'
+      - "9222:9222"
     working_dir: /app
-    entrypoint: ['npm', 'run', 'start:dev']
+    entrypoint: ['npm', 'run', 'start:docker']
     volumes:
       - .:/app
     networks:
