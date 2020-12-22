@@ -2,6 +2,8 @@ const RiskQuizProfiler = require('../profilers/RiskQuizProfiler');
 const IncomeProfiler = require('../profilers/IncomeProfiler');
 const HouseProfiler = require('../profilers/HouseProfiler');
 const VehicleProfiler = require('../profilers/VehicleProfiler');
+const DependentProfiler = require('../profilers/DependentProfiler');
+const MaritalStatusProfiler = require('../profilers/MaritalStatusProfiler');
 const AgeProfiler = require('../profilers/AgeProfiler');
 
 class ProfilerChainFactory {
@@ -12,6 +14,8 @@ class ProfilerChainFactory {
         VehicleProfiler,
         IncomeProfiler,
         HouseProfiler,
+        DependentProfiler,
+        MaritalStatusProfiler,
         AgeProfiler,
       ],
     };
