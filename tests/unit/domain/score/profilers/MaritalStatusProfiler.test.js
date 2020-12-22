@@ -43,8 +43,8 @@ describe('MaritalStatusProfiler', () => {
 
       const expectedResult = new Score({
         ...baseScore,
-        life: baseScore.life - 1,
-        disability: baseScore.disability + 1,
+        life: baseScore.life + 1,
+        disability: baseScore.disability - 1,
       });
 
       expect(result).toStrictEqual(expectedResult);

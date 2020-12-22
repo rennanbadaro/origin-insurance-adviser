@@ -20,8 +20,8 @@ class MaritalStatusProfiler extends BaseProfiler {
 
     profilerResult = new Score({
       ...profilerResult,
-      disability: isNull(profilerResult.disability) ? null : profilerResult.disability + 1,
-      life: isNull(profilerResult.life) ? null : profilerResult.life - 1,
+      disability: isNull(profilerResult.disability) ? null : profilerResult.disability - 1,
+      life: isNull(profilerResult.life) ? null : profilerResult.life + 1,
     });
 
     return this.handleNext(adviceInput, profilerResult);
