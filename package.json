@@ -6,10 +6,11 @@
   "scripts": {
     "start": "node -r dotenv/config src/index.js",
     "start:dev": "node_modules/.bin/nodemon -r dotenv/config src/index.js",
-    "start:docker": "node_modules/.bin/nodemon -r dotenv/config --nolazy --inspect=0.0.0.0:9222 src/index.js",
+    "start:docker-dev": "node_modules/.bin/nodemon -r dotenv/config --nolazy --inspect=0.0.0.0:9222 src/index.js",
     "docker:up": "docker-compose up",
     "docker:down": "docker-compose down",
-    "test:unit": "NODE_PATH=. jest tests/unit"
+    "test:unit": "NODE_PATH=. node_modules/.bin/jest tests/unit",
+    "test:functional": "NODE_PATH=. jest tests/functional --setupFiles dotenv/config"
   },
   "keywords": [],
   "author": "",
@@ -25,6 +26,7 @@
   },
   "devDependencies": {
     "@types/jest": "^26.0.19",
+    "axios": "^0.21.1",
     "jest": "^26.6.3",
     "nodemon": "^2.0.6"
   }

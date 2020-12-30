@@ -22,18 +22,18 @@ npm run start:dev
 
 ## Tests
 
-The project contains units (and functional) tests that covers all the business logic. To run the full test suite type the following command:
+The project contains units and functional tests that covers all the business logic.
 
-```sh
-npm run test:all
-```
-
-To run only unit tests:
-
+To run unit tests:
 ```
 npm run test:unit
 ```
 
+To run functional tests first start the docker then run the test script
+```
+npm run docker:up
+npm run test:functional
+```
 ## Development Notes
 
 Some brief comments about the development process can be found [here](./notes.md)

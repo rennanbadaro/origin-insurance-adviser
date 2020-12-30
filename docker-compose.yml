@@ -2,7 +2,7 @@ version: '3'
 
 services:
   app:
-    image: node:12.16.1-alpine3.11
+    image: node:14.15.3-alpine
     container_name: insurance-adviser
     restart: always
     env_file: .env
@@ -10,7 +10,7 @@ services:
       - '${PORT}:${PORT}'
       - "9222:9222"
     working_dir: /app
-    entrypoint: ['npm', 'run', 'start:docker']
+    entrypoint: ['npm', 'run', 'start:docker-dev']
     volumes:
       - .:/app
     networks:
