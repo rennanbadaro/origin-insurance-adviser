@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node -r dotenv/config src/index.js",
-    "start:dev": "node_modules/.bin/nodemon -r dotenv/config src/index.js",
+    "start:dev": "DEBUG=koa* node_modules/.bin/nodemon -r dotenv/config src/index.js",
     "start:docker-dev": "node_modules/.bin/nodemon -r dotenv/config --nolazy --inspect=0.0.0.0:9222 src/index.js",
     "docker:up": "docker-compose up",
     "docker:down": "docker-compose down",
@@ -22,7 +22,10 @@
     "joi": "^17.3.0",
     "koa": "^2.13.0",
     "koa-bodyparser": "^4.3.0",
-    "lodash": "^4.17.20"
+    "koa-pino-logger": "^3.0.0",
+    "lodash": "^4.17.20",
+    "pino": "^6.9.0",
+    "pino-pretty": "^4.3.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.19",
