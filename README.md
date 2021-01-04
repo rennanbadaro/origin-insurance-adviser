@@ -1,8 +1,5 @@
 # Origin Insurance Adviser
 
-Simple API that helps users get insurance advice without having to get their hands dirty.
-Just provide some basic information about assets and income and let it do its magic
-
 ## Requirements
 
 - [NodeJS - 12.x](https://nodejs.org/) *
